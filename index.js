@@ -5,21 +5,16 @@ require("dotenv").config();
 const app = express();
 
 const socket = io.connect("https://callmonitoringwebsocket.onrender.com");
-const PRIVATE_WS_ROOM = "123abc";
+
 // console.log(process.env.CALL_MONITORING_WEB_SOCKET_LINK);
 
-socket.emit("join", PRIVATE_WS_ROOM);
+socket.emit("join", "productionApp");
 console.log("socket.emit(join, PRIVATE_WS_ROOM); ------> Executed");
 
 let wsConnected = false;
 socket.on("wsConnected", (boolean) => {
   wsConnected = boolean;
   console.log("Connection ESTABLISHED SUCCESSFULLY!!!!");
-});
-
-socket.on("requestResponse", (req) => {
-  alert(req);
-  console.log("line 22 ------> Executed", req);
 });
 
 const emitServerReady = (query) => {
