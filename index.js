@@ -4,8 +4,9 @@ require("dotenv").config();
 
 const app = express();
 
-const socket = io.connect(process.env.CALL_MONITORING_WEB_SOCKET_LINK);
-const PRIVATE_WS_ROOM = process.env.PRIVATE_WS_ROOM;
+const socket = io.connect("https://callmonitoringwebsocket.onrender.com");
+const PRIVATE_WS_ROOM = "123abc";
+// console.log(process.env.CALL_MONITORING_WEB_SOCKET_LINK);
 
 socket.emit("join", PRIVATE_WS_ROOM);
 console.log("socket.emit(join, PRIVATE_WS_ROOM); ------> Executed");
@@ -21,21 +22,18 @@ socket.on("requestResponse", (req) => {
   console.log("line 22 ------> Executed", req);
 });
 
-const emitServerReady = () => {
+const emitServerReady = (query) => {
+  console.log(query);
   socket.emit("requestReceived", {
     room: PRIVATE_WS_ROOM,
-    request: {
-      Number: "904-111-111",
-      Call_Received_ON: "647-XXX-XXX",
-      CLient: "Popular Restauranat",
-    },
+    request: query,
   });
 };
 
 app.get("/", (req, res) => {
   !wsConnected
     ? res.status(503).send("Server Not Ready Yet")
-    : res.send("Server Ready") && emitServerReady();
+    : res.send("Server Ready") && emitServerReady(req.query);
 });
 
 app.listen("3102", () => {
