@@ -6,9 +6,10 @@ const app = express();
 
 const socket = io.connect("https://callmonitoringwebsocket.onrender.com");
 
-// console.log(process.env.CALL_MONITORING_WEB_SOCKET_LINK);
+const PRIVATE_WS_ROOM = "productionApp";
 
-socket.emit("join", "productionApp");
+
+socket.emit("join", PRIVATE_WS_ROOM);
 console.log("socket.emit(join, PRIVATE_WS_ROOM); ------> Executed");
 
 let wsConnected = false;
